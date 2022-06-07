@@ -81,7 +81,7 @@ app.use("/users", user);
 app.use("/recipes", recipes);
 app.use(auth);
 
-// Default router
+// Default router -> catches errors
 app.use(function (err, req, res, next) {
   console.error(err);
   res.status(err.status || 500).send({ message: err.message, success: false });
