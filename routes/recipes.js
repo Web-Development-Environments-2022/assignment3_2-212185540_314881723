@@ -37,6 +37,7 @@ router.get("/search/query/:searchQuery/amount/:num",async (req,res,next)=>{
   search_params.query = searchQuery;
   search_params.number = num;
   search_params.instructionsRequired=true;
+  search_params.addRecipeInformation=true;
   search_params.apiKey = process.env.spooncular_apiKey;
 
   //give a defualt num
