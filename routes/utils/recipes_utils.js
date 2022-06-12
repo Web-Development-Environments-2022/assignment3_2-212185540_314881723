@@ -90,6 +90,16 @@ async function getRecipeDetails(recipe_id) {
     }
 }
 
+async function getRecipeDetailsMultiple(recipe_id_array) {
+    results = [];
+    console.log(recipe_id_array)
+    for (index = 0; index < recipe_id_array.length; index++) {
+        console.log(recipe_id_array[index]);
+        results.push(await getRecipeDetails(recipe_id_array[index]));
+    }
+    return results;
+}
+
 async function getRecipeIngredients(ingredients) {
     return ingredients.map((recipe_info) => {
         let data = recipe_info;
@@ -107,7 +117,7 @@ async function getRecipeIngredients(ingredients) {
 }
 
 async function getRecipeDetailsLocal(id) {
-    //console.log(id)
+    console.log(id)
     let recipe_info = await getRecipeInformationLocal(id);
     //console.log(recipe_info)
     return recipe_info.map((recipe_info) => {
@@ -153,6 +163,7 @@ exports.getRecipeDetails = getRecipeDetails;
 exports.getRecipeInformationLocal = getRecipeInformationLocal;
 exports.getRecipeDetailsLocal = getRecipeDetailsLocal;
 exports.getRandomThreeRecipes = getRandomThreeRecipes;
-exports.extractPreviewRecipeDetails = extractPreviewRecipeDetails
+exports.extractPreviewRecipeDetails = extractPreviewRecipeDetails;
+exports.getRecipeDetailsMultiple = getRecipeDetailsMultiple;
 
 

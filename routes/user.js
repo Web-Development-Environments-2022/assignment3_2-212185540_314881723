@@ -67,7 +67,7 @@ router.get('/favorites', async (req,res,next) => {
     const recipes_id = await user_utils.getFavoriteRecipes(user_id);
     let recipes_id_array = [];
     recipes_id.map((element) => recipes_id_array.push(element.recipe_id)); //extracting the recipe ids into array
-    const results = await recipe_utils.getRecipeDetails(recipes_id_array);
+    const results = await recipe_utils.getRecipeDetailsMultiple(recipes_id_array);
     res.status(200).send(results);
   } catch(error){
     next(error); 
@@ -86,7 +86,33 @@ router.get('/recipes',async(req,res,next)=>{
   } catch(error){
     next(error);
   }
-})
+});
+
+router.get('/user_last_3_watch', async (req,res,next) => {
+  try{
+    const user_id = req.session.user_id;
+    const results = await user_utils.getLast3Watch(user_id);
+    const results2=await user_utils.get_user_Last3Watch(results);
+    res.status(200).send(results2);
+  } catch(error){
+    next(error); 
+  }
+});
+
+//1.Update in the user_indication_about_recipe Table:the already watchFlage 
+//2.Update  the user_last_3_watch Table
+router.post('/user_watched_recipe', async (req,res,next) => {
+  try{
+    const user_id = req.session.user_id;
+    const recipe_id = req.body.recipeId;
+    const results1 = await user_utils.Update_Table_user_indication_about_recipe(user_id,recipe_id);
+    const results2 = await user_utils.Update_User_last_3_watch(user_id,recipe_id);
+    res.status(200).send("The Recipe successfully update as an watched recipe");
+  } catch(error){
+    next(error); 
+  }
+});
+
 
 
 module.exports = router;
