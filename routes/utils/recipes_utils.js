@@ -41,6 +41,7 @@ function extractPreviewRecipeDetails(recipes_info){
         let data = recipe_info;
         if(recipe_info.data){
             data=recipe_info.data
+            
         }
         let{
             id,
@@ -52,6 +53,7 @@ function extractPreviewRecipeDetails(recipes_info){
             vegetarian,
             glutenFree,
             instructions,
+            analyzedInstructions,
             extendedIngredients,
         } = data;
         return {
@@ -64,6 +66,7 @@ function extractPreviewRecipeDetails(recipes_info){
             vegetarian: vegetarian,
             glutenFree: glutenFree,
             instructions: instructions,
+            analyzedInstructions:analyzedInstructions,
             extendedIngredients: extendedIngredients,
         }
     })
@@ -73,8 +76,8 @@ function extractPreviewRecipeDetails(recipes_info){
 
 async function getRecipeDetails(recipe_id) {
     let recipe_info = await getRecipeInformation(recipe_id);
-    let { id, title, readyInMinutes, image, aggregateLikes, vegan, vegetarian, glutenFree,  instructions, extendedIngredients} = recipe_info.data;
-    extendedIngredients = await getRecipeIngredients(extendedIngredients)
+    let { id, title, readyInMinutes, image, aggregateLikes, vegan, vegetarian, glutenFree,  instructions, extendedIngredients, analyzedInstructions} = recipe_info.data;
+    //extendedIngredients = await getRecipeIngredients(extendedIngredients)
     return {
         id: id,
         title: title,
@@ -85,7 +88,8 @@ async function getRecipeDetails(recipe_id) {
         vegetarian: vegetarian,
         glutenFree: glutenFree,
         instructions: instructions,
-        extendedIngredients: extendedIngredients
+        extendedIngredients: extendedIngredients,
+        analyzedInstructions: analyzedInstructions
         
     }
 }
@@ -127,7 +131,7 @@ async function getRecipeDetailsLocal(id) {
             title,
             readyInMinutes,
             image,
-            aggregateLikes,
+            popularity,
             vegan,
             vegetarian,
             glutenFree,
@@ -140,7 +144,7 @@ async function getRecipeDetailsLocal(id) {
             title: title,
             readyInMinutes: readyInMinutes,
             image: image,
-            popularity: aggregateLikes,
+            popularity: popularity,
             vegan: Boolean(vegan),
             vegetarian: Boolean(vegetarian),
             glutenFree: Boolean(glutenFree),

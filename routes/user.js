@@ -16,6 +16,7 @@ router.use(async function (req, res, next) {
       }
     }).catch(err => next(err));
   } else {
+    console.log(req.session.user_id);
     res.sendStatus(401);
   }
 });
@@ -49,6 +50,7 @@ router.post('/createRecipe', async (req,res,next)=>{
 router.post('/favorites', async (req,res,next) => {
   try{
     const user_id = req.session.user_id;
+    console.log(req.body)
     const recipe_id = req.body.recipeId;
     await user_utils.markAsFavorite(user_id,recipe_id);
     res.status(200).send("The Recipe successfully saved as favorite");
@@ -90,6 +92,7 @@ router.get('/recipes',async(req,res,next)=>{
 
 router.get('/user_last_3_watch', async (req,res,next) => {
   try{
+
     const user_id = req.session.user_id;
     const results = await user_utils.getLast3Watch(user_id);
     const results2=await user_utils.get_user_Last3Watch(results);
@@ -108,6 +111,30 @@ router.post('/user_watched_recipe', async (req,res,next) => {
     const results1 = await user_utils.Update_Table_user_indication_about_recipe(user_id,recipe_id);
     const results2 = await user_utils.Update_User_last_3_watch(user_id,recipe_id);
     res.status(200).send("The Recipe successfully update as an watched recipe");
+  } catch(error){
+    next(error); 
+  }
+});
+
+router.get('/user_indication_recipe', async (req,res,next) => {
+  try{
+    const user_id = req.session.user_id;
+    const recipe_id = req.body.recipeId;
+    const results = await user_utils.Get_user_indication_about_recipe(user_id,recipe_id);
+    res.status(200).send(results);
+  } catch(error){
+    next(error); 
+  }
+});
+
+router.get('/user_indication_recipe_NEW', async (req,res,next) => {
+  try{
+    const user_id = req.session.user_id;
+    const recipes_id = await user_utils.Get_user_indication_about_recipe_NEW(user_id);
+    let recipes_id_array = [];
+    recipes_id.map((element) => recipes_id_array.push(element.recipe_id)); //extracting the recipe ids into array
+    results = recipes_id_array;
+    res.status(200).send(results);
   } catch(error){
     next(error); 
   }

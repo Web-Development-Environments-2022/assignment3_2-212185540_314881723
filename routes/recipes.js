@@ -39,7 +39,6 @@ router.get("/search/query/:searchQuery/amount/:num",async (req,res,next)=>{
   search_params.instructionsRequired=true;
   search_params.addRecipeInformation=true;
   search_params.apiKey = process.env.spooncular_apiKey;
-
   //give a defualt num
   if(num != 5 && num != 10 && num != 15){
     search_params.number = 5;
@@ -47,7 +46,10 @@ router.get("/search/query/:searchQuery/amount/:num",async (req,res,next)=>{
   search_utils.extractQueryParams(req.query,search_params)
   try{
     search_utils.searchForRecipes(search_params)
-    .then((recipes)=> res.send(recipes_utils.extractPreviewRecipeDetails(recipes.data.results)))
+    .then((recipes)=> 
+    {
+      res.send(recipes_utils.extractPreviewRecipeDetails(recipes.data.results))
+    })
   } catch(error){
     next(error);
   }
