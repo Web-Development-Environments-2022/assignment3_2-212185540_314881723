@@ -17,7 +17,7 @@ tags:
   - name: auth
     description: everything about authentication in our site
 paths:
-  /recipe/{recipeId}:
+  /recipes/{recipeId}:
     get:
       tags:
       - recipes
@@ -148,6 +148,22 @@ paths:
                   $ref: '#/components/schemas/recipes'
         "500":
           description: error message  
+  /users/favoritesIDOnly:
+    get:
+      tags:
+      - users
+      summary: return all the IDs of the favorited recipes the user favorited 
+      description: return all the IDs of the favorited recipes the user favorited 
+      responses:
+        "200":
+          description: succesfull operation - return recipe IDs
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/recipes'
+        "500":
+          description: error message          
   /users/favorites1: #doesnt let me give the same path name with one post and one get so I added the '1' for it to not throw errors.
     post:
       tags:
@@ -229,7 +245,75 @@ paths:
         "200":
           description: The Recipe successfully update as an watched recipe
         "400":
-          description: there is no user withe the user_id in the system!        
+          description: there is no user withe the user_id in the system!  
+  /users/user_indication_recipe:
+    get:
+      tags:
+      - users
+      summary: get information about a recipe in relation to a specific user
+      description: get information about a recipe in relation to a specific user, (if the user watched or if the user favorited)
+      operationId: user_indication_recipe
+      parameters:
+      - name: user_id
+        in: cookie
+        description: user_id of the user we want to get recipe information about
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: integer
+      - name: recipe_id
+        in: query
+        description: recipe_id of the recipe that we want to get information about
+        required: true
+        style: form
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: succesfull operation - return user_indication_recipe
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/user_last_3_watch'
+        "400":
+          description: the user dont has any recipe that he watched yet. 
+  /users/user_indication_recipe_NEW:
+    get:
+      tags:
+      - users
+      summary: get information about a recipe in relation to a specific user
+      description: get information about a recipe in relation to a specific user, (if the user watched the recipe only)
+      operationId: user_indication_recipe_NEW
+      parameters:
+      - name: user_id
+        in: cookie
+        description: user_id of the user we want to get recipe information about
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: integer
+      - name: recipe_id
+        in: query
+        description: recipe_id of the recipe that we want to get information about
+        required: true
+        style: form
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: succesfull operation - return user_indication_recipe_NEW
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/user_last_3_watch'
+        "400":
+          description: the user dont has any recipe that he watched yet.        
   /register:
     post:
       tags:
